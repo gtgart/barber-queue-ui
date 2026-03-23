@@ -285,9 +285,9 @@ export default function BarberWaitQueueUI() {
               </div>
               <SettingsMenu />
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight">BarberQ</h1>
+            <h1 className="text-3xl font-semibold tracking-tight">QueueCut</h1>
             <p className="mt-1 text-sm text-muted">
-              Time-based allocation using your service durations.{' '}
+              Smart Barber Waitlist — time-based allocation using your service durations.{' '}
               <span className="text-violet-600 dark:text-violet-300">Any barber</span> auto-selects
               the lightest live minute load.
             </p>
