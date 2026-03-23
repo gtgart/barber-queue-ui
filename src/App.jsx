@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { useTheme } from './lib/theme.jsx';
 
 const SERVICE_TIMES = {
   Haircut: 30,
@@ -115,7 +116,7 @@ const COLUMN_META = [
     key: 'waiting',
     title: 'Waiting',
     subtitle: 'Remote queue',
-    accent: 'border-zinc-700',
+    accent: 'border-zinc-300 dark:border-zinc-700',
     headerDot: 'bg-zinc-500',
   },
   {
@@ -273,19 +274,22 @@ export default function BarberWaitQueueUI() {
   const barberLoads = useMemo(() => getBarberLoads(columns), [columns]);
 
   return (
-    <motion.div layout className="min-h-screen bg-zinc-950 p-6 text-zinc-100">
+    <motion.div layout className="min-h-screen bg-surface p-6 text-primary">
       <div className="mx-auto max-w-7xl">
-        <header className="mb-6 flex flex-col gap-4 rounded-3xl border border-white/10 bg-zinc-900/80 p-5 shadow-2xl shadow-black/20 lg:flex-row lg:items-center lg:justify-between">
+        <header className="mb-6 flex flex-col gap-4 rounded-3xl border border-edge bg-panel p-5 shadow-2xl shadow-black/20 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-sm text-zinc-400">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-              Brookvale Barbers
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-muted">
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                Brookvale Barbers
+              </div>
+              <SettingsMenu />
             </div>
             <h1 className="text-3xl font-semibold tracking-tight">Wait Queue</h1>
-            <p className="mt-1 text-sm text-zinc-400">
+            <p className="mt-1 text-sm text-muted">
               Time-based allocation using your service durations.{' '}
-              <span className="text-violet-300">Any barber</span> auto-selects the lightest
-              live minute load.
+              <span className="text-violet-600 dark:text-violet-300">Any barber</span> auto-selects
+              the lightest live minute load.
             </p>
           </div>
 
@@ -314,7 +318,7 @@ export default function BarberWaitQueueUI() {
           />
         </div>
 
-        <div className="mb-4 rounded-2xl border border-violet-500/20 bg-violet-500/10 px-4 py-3 text-sm text-violet-100">
+        <div className="mb-4 rounded-2xl border border-violet-500/20 bg-violet-500/10 px-4 py-3 text-sm text-violet-800 dark:text-violet-100">
           <span className="font-semibold">Service timing model:</span> Haircut 30m • Haircut +
           Beard Shaping 50m • Haircut + Clipper Over Beard 40m. In-chair customers use remaining
           minutes. In-shop assigned customers add full queued minutes.
@@ -325,7 +329,7 @@ export default function BarberWaitQueueUI() {
             {COLUMN_META.map((column) => (
               <section
                 key={column.key}
-                className={`rounded-3xl border ${column.accent} bg-zinc-900/70 p-4 shadow-xl shadow-black/20 backdrop-blur`}
+                className={`rounded-3xl border ${column.accent} bg-panel p-4 shadow-xl shadow-black/20 backdrop-blur`}
               >
                 <div className="mb-4 flex items-start justify-between">
                   <div>
@@ -333,16 +337,16 @@ export default function BarberWaitQueueUI() {
                       <span className={`h-2.5 w-2.5 rounded-full ${column.headerDot}`} />
                       <h2 className="text-lg font-semibold">{column.title}</h2>
                     </div>
-                    <p className="mt-1 text-sm text-zinc-400">{column.subtitle}</p>
+                    <p className="mt-1 text-sm text-muted">{column.subtitle}</p>
                   </div>
-                  <div className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-xs text-zinc-300">
+                  <div className="rounded-full border border-edge bg-badge px-2.5 py-1 text-xs text-secondary">
                     {columns[column.key].length}
                   </div>
                 </div>
 
                 <motion.div
                   layout
-                  className="min-h-[420px] space-y-3 rounded-2xl border border-dashed border-white/5 bg-black/10 p-2"
+                  className="min-h-[420px] space-y-3 rounded-2xl border border-dashed border-edge-subtle bg-inset p-2"
                 >
                   <AnimatePresence mode="popLayout">
                     {columns[column.key].map((card, index) => (
@@ -371,7 +375,7 @@ export default function BarberWaitQueueUI() {
                   </AnimatePresence>
 
                   {columns[column.key].length === 0 && (
-                    <div className="rounded-2xl border border-white/5 bg-zinc-950/50 p-4 text-sm text-zinc-500">
+                    <div className="rounded-2xl border border-edge-subtle bg-surface p-4 text-sm text-faint">
                       No customers here.
                     </div>
                   )}
@@ -381,16 +385,16 @@ export default function BarberWaitQueueUI() {
           </main>
         </LayoutGroup>
 
-        <section className="mt-5 rounded-3xl border border-green-500/20 bg-zinc-900/60 p-4 shadow-xl shadow-black/20">
+        <section className="mt-5 rounded-3xl border border-green-500/20 bg-panel p-4 shadow-xl shadow-black/20">
           <div className="mb-3 flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
                 <h2 className="text-lg font-semibold">Completed Stack</h2>
               </div>
-              <p className="mt-1 text-sm text-zinc-400">Recently finished cuts collapse here.</p>
+              <p className="mt-1 text-sm text-muted">Recently finished cuts collapse here.</p>
             </div>
-            <div className="rounded-full border border-white/10 bg-black/20 px-2.5 py-1 text-xs text-zinc-300">
+            <div className="rounded-full border border-edge bg-badge px-2.5 py-1 text-xs text-secondary">
               {columns.completed.length}
             </div>
           </div>
@@ -411,7 +415,7 @@ export default function BarberWaitQueueUI() {
             </AnimatePresence>
 
             {columns.completed.length === 0 && (
-              <div className="rounded-2xl border border-white/5 bg-zinc-950/50 p-4 text-sm text-zinc-500">
+              <div className="rounded-2xl border border-edge-subtle bg-surface p-4 text-sm text-faint">
                 Completed cuts will appear here.
               </div>
             )}
@@ -422,18 +426,135 @@ export default function BarberWaitQueueUI() {
   );
 }
 
+function SettingsMenu() {
+  const { theme, toggleTheme } = useTheme();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      <motion.button
+        onClick={() => setOpen(!open)}
+        whileTap={{ scale: 0.9, rotate: -15 }}
+        whileHover={{ scale: 1.08 }}
+        className="flex h-9 w-9 items-center justify-center rounded-xl border border-edge bg-inset text-muted hover:text-primary transition-colors"
+        aria-label="Settings"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40"
+              onClick={() => setOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -4 }}
+              transition={{ type: 'spring', stiffness: 420, damping: 26 }}
+              className="absolute right-0 top-full mt-2 z-50 w-52 rounded-2xl border border-edge bg-card p-3 shadow-xl shadow-black/20"
+            >
+              <div className="mb-2 text-xs font-medium uppercase tracking-wide text-faint">
+                Appearance
+              </div>
+              <div className="flex gap-2">
+                {[
+                  {
+                    id: 'light',
+                    label: 'Light',
+                    icon: (
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="4" />
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                      </svg>
+                    ),
+                  },
+                  {
+                    id: 'dark',
+                    label: 'Dark',
+                    icon: (
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                      </svg>
+                    ),
+                  },
+                ].map((opt) => {
+                  const active = theme === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => {
+                        if (!active) toggleTheme();
+                        setOpen(false);
+                      }}
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${
+                        active
+                          ? 'border-violet-500/40 bg-violet-500/10 text-violet-700 dark:text-violet-300'
+                          : 'border-edge bg-inset text-muted hover:text-primary'
+                      }`}
+                    >
+                      {opt.icon}
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function StatCard({ label, value, tone = 'zinc' }) {
   const tones = {
-    zinc: 'border-zinc-700 bg-zinc-950/70 text-zinc-100',
-    orange: 'border-orange-500/30 bg-orange-500/10 text-orange-100',
-    emerald: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-100',
-    sky: 'border-sky-500/30 bg-sky-500/10 text-sky-100',
-    green: 'border-green-500/30 bg-green-500/10 text-green-100',
+    zinc: 'border-edge bg-card text-primary',
+    orange: 'border-orange-500/30 bg-orange-500/10 text-orange-800 dark:text-orange-100',
+    emerald: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-100',
+    sky: 'border-sky-500/30 bg-sky-500/10 text-sky-800 dark:text-sky-100',
+    green: 'border-green-500/30 bg-green-500/10 text-green-800 dark:text-green-100',
   };
 
   return (
     <div className={`rounded-2xl border p-3 ${tones[tone]}`}>
-      <div className="text-xs uppercase tracking-wide text-zinc-400">{label}</div>
+      <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
       <div className="mt-1 text-2xl font-semibold">{value}</div>
     </div>
   );
@@ -441,12 +562,12 @@ function StatCard({ label, value, tone = 'zinc' }) {
 
 function MiniBarberStatus({ barber, detail, color = 'bg-zinc-500' }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-zinc-900/60 p-4">
-      <div className="flex items-center gap-2 text-sm font-medium text-zinc-200">
+    <div className="rounded-2xl border border-edge bg-panel p-4">
+      <div className="flex items-center gap-2 text-sm font-medium text-primary">
         <span className={`h-2.5 w-2.5 rounded-full ${color}`} />
         {barber}
       </div>
-      <div className="mt-1 text-sm text-zinc-400">{detail}</div>
+      <div className="mt-1 text-sm text-muted">{detail}</div>
     </div>
   );
 }
@@ -485,18 +606,18 @@ function QueueCard({
         x: moving ? 26 : 0,
         boxShadow: moving
           ? '0 0 0 1px rgba(52,211,153,0.25), 0 24px 50px rgba(16,185,129,0.22)'
-          : '0 8px 24px rgba(0,0,0,0.22)',
+          : '0 8px 24px rgba(0,0,0,0.12)',
       }}
       exit={{ opacity: 0, scale: 0.9, x: 34, y: -8 }}
       transition={{ type: 'spring', stiffness: 340, damping: 28 }}
       className={[
-        'relative rounded-2xl border bg-zinc-950/90 p-4 transition-all duration-300',
+        'relative rounded-2xl border bg-card p-4 transition-all duration-300',
         highlight
           ? 'border-emerald-400/50 ring-1 ring-emerald-400/20 scale-[1.01]'
-          : 'border-white/10 hover:-translate-y-0.5',
+          : 'border-edge hover:-translate-y-0.5',
         pulse ? 'animate-pulse' : '',
         loyaltyHot ? 'shadow-yellow-500/10 ring-1 ring-yellow-400/20' : '',
-        completed ? 'bg-zinc-900/40 opacity-45 grayscale' : '',
+        completed ? 'bg-badge opacity-45 grayscale' : '',
       ].join(' ')}
     >
       {moving && (
@@ -511,7 +632,7 @@ function QueueCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="text-xl font-semibold tracking-tight">{name}</div>
-          <div className="mt-1 flex items-center gap-2 text-sm text-zinc-300">
+          <div className="mt-1 flex items-center gap-2 text-sm text-secondary">
             <span className="block min-w-0 flex-1">{service}</span>
           </div>
         </div>
@@ -522,13 +643,13 @@ function QueueCard({
               onClick={onStart}
               whileTap={{ scale: 0.92 }}
               whileHover={{ scale: 1.06 }}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-400/30 bg-emerald-500/15 text-xl text-emerald-300 shadow-lg shadow-emerald-950/20"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-400/30 bg-emerald-500/15 text-xl text-emerald-600 dark:text-emerald-300 shadow-lg shadow-emerald-950/20"
               aria-label="Move to in chair"
             >
               →
             </motion.button>
           ) : (
-            <span className="inline-flex rounded-full border border-white/10 bg-zinc-900 px-2.5 py-1 text-xs text-zinc-300">
+            <span className="inline-flex rounded-full border border-edge bg-badge px-2.5 py-1 text-xs text-secondary">
               {status}
             </span>
           )}
@@ -540,29 +661,29 @@ function QueueCard({
         <InfoPill
           label="Loyalty"
           value={loyalty}
-          valueClassName={loyaltyHot ? 'text-yellow-300' : 'text-zinc-100'}
+          valueClassName={loyaltyHot ? 'text-yellow-600 dark:text-yellow-300' : 'text-primary'}
         />
       </div>
 
-      <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2 text-sm text-zinc-300">
+      <div className="mt-4 rounded-xl border border-edge-subtle bg-inset px-3 py-2 text-sm text-secondary">
         ⏱ {eta}
       </div>
 
       {typeof remainingMinutes === 'number' && !completed && (
-        <div className="mt-3 rounded-xl border border-sky-500/20 bg-sky-500/10 px-3 py-2 text-sm text-sky-100">
+        <div className="mt-3 rounded-xl border border-sky-500/20 bg-sky-500/10 px-3 py-2 text-sm text-sky-800 dark:text-sky-100">
           Remaining time • ~{remainingMinutes} mins
         </div>
       )}
 
       {extraMeta && !completed && (
-        <div className="mt-3 rounded-xl border border-violet-500/20 bg-violet-500/10 px-3 py-2 text-sm text-violet-100">
+        <div className="mt-3 rounded-xl border border-violet-500/20 bg-violet-500/10 px-3 py-2 text-sm text-violet-800 dark:text-violet-100">
           {extraMeta}
         </div>
       )}
 
       {showBarberPicker && !completed && (
-        <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.03] p-3">
-          <div className="mb-2 text-xs uppercase tracking-wide text-zinc-500">Choose barber</div>
+        <div className="mt-4 rounded-xl border border-edge-subtle bg-inset p-3">
+          <div className="mb-2 text-xs uppercase tracking-wide text-faint">Choose barber</div>
           <div className="flex flex-wrap gap-2">
             {barbers.map((b) => {
               const active = selectedBarber === b.name;
@@ -578,7 +699,7 @@ function QueueCard({
                   className={`group flex items-center overflow-hidden rounded-full border transition-all duration-300 ${
                     active
                       ? `${b.color} border-transparent pr-4 text-white shadow-lg shadow-black/20`
-                      : 'border-white/10 bg-zinc-900 pr-0 hover:pr-4'
+                      : 'border-edge bg-badge pr-0 hover:pr-4'
                   }`}
                 >
                   <span
@@ -591,7 +712,7 @@ function QueueCard({
                   <motion.span
                     animate={active ? { opacity: 1, width: 'auto' } : { opacity: 0, width: 0 }}
                     transition={{ type: 'spring', stiffness: 340, damping: 22 }}
-                    className={`whitespace-nowrap text-sm ${active ? 'text-white' : 'text-zinc-200'}`}
+                    className={`whitespace-nowrap text-sm ${active ? 'text-white' : 'text-primary'}`}
                   >
                     {b.name}
                   </motion.span>
@@ -610,7 +731,7 @@ function QueueCard({
             className={`w-full rounded-2xl px-4 py-3 text-base font-semibold transition-all ${
               completed
                 ? 'bg-green-600 text-white shadow-lg shadow-green-700/20'
-                : 'border border-white/10 bg-zinc-800 text-zinc-100 hover:bg-zinc-700'
+                : 'border border-edge bg-btn text-primary hover:bg-btn-hover'
             }`}
           >
             {completed ? 'Completed ✓' : 'Complete'}
@@ -621,10 +742,10 @@ function QueueCard({
   );
 }
 
-function InfoPill({ label, value, valueClassName = 'text-zinc-100' }) {
+function InfoPill({ label, value, valueClassName = 'text-primary' }) {
   return (
-    <div className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2">
-      <div className="text-xs uppercase tracking-wide text-zinc-500">{label}</div>
+    <div className="rounded-xl border border-edge-subtle bg-inset px-3 py-2">
+      <div className="text-xs uppercase tracking-wide text-faint">{label}</div>
       <div className={`mt-1 font-medium ${valueClassName}`}>{value}</div>
     </div>
   );
